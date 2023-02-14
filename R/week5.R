@@ -11,6 +11,6 @@ Bnotes_tbl <-read_delim("../data/Bnotes.txt",delim = "\t",col_names = TRUE)
 
 # Data Cleaning
 Aclean_tbl <- Adata_tbl %>%
-  separate(qs, into =  paste0("q",1:5),sep = " - ") %>%
+  separate(qs, into = paste0("q",1:5),sep = " - ") %>%
   mutate(datadate=as.POSIXct(datadate, format = "%b %d %Y, %H:%M:%S")) %>%
-  as.integer
+  mutate_at(vars(paste0("q",1:5)),as.integer)
