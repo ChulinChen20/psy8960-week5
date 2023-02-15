@@ -12,15 +12,16 @@ Bnotes_tbl <-read_delim("../data/Bnotes.txt",delim = "\t",col_names = TRUE)
 # Data Cleaning
 Aclean_tbl <- Adata_tbl %>%
   separate(qs, into = paste0("q",1:5),sep = " - ") %>%
-  mutate(datadate=as.POSIXct(datadate, format = "%b %d %Y, %H:%M:%S")) %>%
+  mutate(datadate=mdy_hms(datadate)) %>%
   mutate_at(vars(paste0("q",1:5)),as.integer) %>%
   left_join(Anotes_tbl,by="parnum")%>%
   filter(is.na(notes))
 ABclean_tbl <- Bdata_tbl %>%
-  mutate(datadate=as.POSIXct(datadate, format = "%b %d %Y, %H:%M:%S")) %>%
+  mutate(datadate=mdy_hms(datadate)) %>%
   mutate_at(vars(paste0("q",1:10)),as.integer)%>%
   left_join(Anotes_tbl,by="parnum")%>%
   filter(is.na(notes))%>%
-  select(-notes)
+  select(-notes)%>%
+  bind_rows(Aclean_tbl,.id="lab")
   
   
